@@ -1,0 +1,8 @@
+ovirt = {
+	engine = {
+		user = "admin@internal";
+		pass = "PASSWORD";
+		server = "https://ENGINE HOST:<PORT>";
+		uri = "/ovirt-engine/api";
+	};
+};
