@@ -1,7 +1,7 @@
 # libzbxovirt
 
 ## Overview
-Zabbix have native support to monitor **VmWare** infrastructure. The gola is to add support for **oVirt/RHEV** into zabbix too.
+Zabbix have native support to monitor **VmWare** infrastructure. The goal is to add support for **oVirt/RHEV** into zabbix too.
 
 This is at stage of **proof-of-concept**, any contributing is welcome.
 
@@ -81,7 +81,7 @@ On zabbix site, the data are populates on these two type of calls using the **De
 Import zabbix template and associate it with the host running this module. It not needs to be engine itself.
 
 ### Object types
-There are 3 object** types: **simple**, **vm**, **hos**.
+There are 3 object** types: **simple**, **vm**, **host**.
 
 The **simple** input is full api endpoint, it looks like `/ovirt-engine/api/vms`.
 The **host** input is host uid, it will call `/ovirt-engine/api/hosts/<uid>`.
@@ -95,11 +95,11 @@ My idea is to build production ready oVirt as next service we provide on VmWare 
 ### Thoughts
 I'm testing on
 
--  low powered (1xCPU, 1GB RAM) zabbix server, all in one
--  Ovirt instance with about 50 VM and 3x hosts, engine (4xCPU, 6GB RAM)
+-  Low powered (1xCPU, 1GB RAM) zabbix server, all in one
+-  oVirt instance with about 50 VM and 3x hosts, engine (4xCPU, 6GB RAM)
 
 The zabbix module is the only way how to offload the zabbix agent part. When using python olny implementation with **UserParameter**, the load was to high due the process forking.
-With natice module I was able to keep load very low.
+With native module I was able to keep load very low.
 
 To offload the engine part, the **Dependent Item** is used. But the load goes very high, about 8-10 ;(
 
@@ -113,13 +113,13 @@ To get nice DHW graphs try to look at **oVirt Mertics**.
 
 This still could be used to monitor basic oVirt parameters like **DataCenter**, **Cluster**, **Storage**, but it need future work on this.
 
-Instead of the **API** the direct access to the **DWH** database couldl be used.
+Instead of the **API** the direct access to the **DWH** database could be used.
 
 Instead of **API** we could try to hook on VDSM API, see **vdsm-client** on `https://www.ovirt.org/develop/developer-guide/vdsm/vdsm-client/`.
 
 Use **zabbix-sender** with any previously mentioned any data source
 
 ### TODO
-The module is using the **basic http auth**. The engine fr each query call internally SSO so there are internal 3 requests. The code should use regular login call and reuse the bearer token. This should offload the engine a little bit.
+The module is using the **basic http auth**. The engine for each query call internally SSO so there are internal 3 requests. The code should use regular login call and reuse the bearer token. This should offload the engine a little bit.
 
 The module is not reusing http connections, aka keep alive. The **SSL handshake** is done for each query and it's expensive.
