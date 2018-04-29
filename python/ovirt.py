@@ -133,8 +133,8 @@ class ZabbixService:
         data = self.api.get(service, follow=follow)
         result = data
         for path in key.split('.'):
-            result = result.get(path, none)
-            if result is none:
+            result = result.get(path, None)
+            if result is None:
                 break
         return result
 
