@@ -1,23 +1,21 @@
 #!/usr/bin/env python
-/*
-** libzbxovirt - A oVirt/RHEV monitoring module for Zabbix
-** Copyright (C) 2018 - Peter Hudec <phudec@cnc.sk>
-**
-** This program is free software; you can redistribute it and/or modify
-** it under the terms of the GNU General Public License as published by
-** the Free Software Foundation; either version 2 of the License, or
-** (at your option) any later version.
-**
-** This program is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-** GNU General Public License for more details.
-**
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
-**/
-
+#
+# libzbxovirt - A oVirt/RHEV monitoring module for Zabbix
+# Copyright (C) 2018 - Peter Hudec <phudec@cnc.sk>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import json
 import requests
@@ -114,7 +112,7 @@ class ZabbixService:
         uri = service_map['service']
         if service_map.get('base_path', None) and uuid is not None:
             uri = "%s/%s/%s" % (service_map.get('base_path'), uuid, uri)
-        
+
         list = self.api.get(uri, follow=service_map.get('follow', None))
         result = {
             'data': []
@@ -131,19 +129,19 @@ class ZabbixService:
 
     def service_get(self, service, uuid, key, follow=None):
         if uuid is not None:
-            service = "%s/%s" % (service, uuid) 
+            service = "%s/%s" % (service, uuid)
         data = self.api.get(service, follow=follow)
         result = data
         for path in key.split('.'):
-            result = result.get(path, none)
-            if result is none:
+            result = result.get(path, None)
+            if result is None:
                 break
         return result
 
     def service_stats(self, service, uuid, follow=None):
         if uuid is not None:
-            service = "%s/%s" % (service, uuid) 
-        service = "%s/statistics" % (service,) 
+            service = "%s/%s" % (service, uuid)
+        service = "%s/statistics" % (service,)
         data = self.api.get(service, follow=follow)
         result = dict()
 
@@ -161,7 +159,7 @@ class ZabbixService:
     def service_show(self, service, follow=None):
         data = self.api.get(service, follow=follow)
         print json.dumps(data, indent=4)
- 
+
 def main(args):
     api = ApiOvirt(
         url="%s/%s" % (config['ovirt']['engine']['server'], config['ovirt']['engine']['uri']),
@@ -183,7 +181,7 @@ def main(args):
 
     if args.show:
         zabbix.service_show(args.service, follow=args.follow)
- 
+
 if __name__ == "__main__":
     import urllib3
     urllib3.disable_warnings()
